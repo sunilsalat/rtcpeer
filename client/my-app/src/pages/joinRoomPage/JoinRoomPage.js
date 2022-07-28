@@ -9,14 +9,30 @@ import JoinRoomButtons from "./components/joinRoomButton";
 const JoinRoomPage = () => {
   const { search } = useLocation();
   const dispatch = useDispatch();
-  const { isHost, error, isAwaiting, roomExists } = useSelector(
-    (state) => state.baseSlice
-  );
+  const {
+    isHost,
+    error,
+    isAwaiting,
+    roomExists,
+    isFull: full,
+  } = useSelector((state) => state.baseSlice);
   const [roomId, setRoomId] = useState();
   const [name, setName] = useState("");
 
   const handleJoinRoom = async () => {
-    dispatch(getRoomExists(roomId));
+    dispatch(getRoomExists(roomId)).then((e) => {
+      if (e.payload.roomExists) {
+        if (e.payload.full) {
+          console.log("gjh");
+          //
+        } else {
+          console.log("gjhhkkhk");
+          //
+        }
+      } else {
+        //
+      }
+    });
   };
 
   const joinRoom = () => {

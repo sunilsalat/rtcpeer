@@ -28,6 +28,7 @@ const BaseSlice = createSlice({
     isAwaiting: false,
     error: "",
     roomExists: false,
+    isFull: false,
   },
   reducers: {
     setIdentity: (state, action) => {
@@ -49,7 +50,10 @@ const BaseSlice = createSlice({
       console.log("Promise fulfilled");
       state.isAwaiting = false;
       state.roomExists = action.payload.roomExists;
+      state.isFull = action.payload.full;
       console.log(action.payload.roomExists);
+      state.error = "";
+
       // set some response
     },
     [getRoomExists.rejected]: (state, error) => {
