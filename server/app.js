@@ -38,4 +38,11 @@ const io = require("socket.io")(server, {
   },
 });
 
+io.on("connection", (socket) => {
+  socket.on("create-room", (data) => {
+    console.log("host is creating ");
+    console.log(data)
+  });
+});
+
 server.listen(port, () => console.log(`server running on ${port}`));
