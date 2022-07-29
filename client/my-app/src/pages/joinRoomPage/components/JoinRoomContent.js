@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { isWithAudioOnly } from "../../../slices/BaseSlice";
 
-const JoinRoomContent = ({ roomId, setRoomId, name, setName }) => {
+const JoinRoomContent = ({ roomId, addRoom, name, setName }) => {
   const { isHost } = useSelector((state) => state.baseSlice);
   const dispatch = useDispatch();
 
@@ -22,7 +22,7 @@ const JoinRoomContent = ({ roomId, setRoomId, name, setName }) => {
           type="text"
           placeholder=" Enter roomId"
           value={roomId}
-          onChange={(e) => setRoomId(e.target.value)}
+          onChange={(e) => addRoom(e.target.value)}
         ></input>
       )}
       <input

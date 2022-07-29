@@ -2,11 +2,18 @@ import "./JoinRoomPage.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setHost, getRoomExists } from "../../slices/BaseSlice";
+import {
+  setHost,
+  getRoomExists,
+  setIdentity,
+  setRoomId,
+} from "../../slices/BaseSlice";
 import JoinRoomContent from "./components/JoinRoomContent";
 import JoinRoomButtons from "./components/joinRoomButton";
 
 const JoinRoomPage = () => {
+  const [roomId, addRoom] = useState('');
+  const [name, setName] = useState("");
   const { search } = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -17,10 +24,9 @@ const JoinRoomPage = () => {
     roomExists,
     isFull: full,
   } = useSelector((state) => state.baseSlice);
-  const [roomId, setRoomId] = useState();
-  const [name, setName] = useState("");
 
   const handleJoinRoom = async () => {
+    dispatch(setIdentity(name));
     if (isHost) {
       createRoom();
     } else {
@@ -30,14 +36,16 @@ const JoinRoomPage = () => {
 
   const joinRoom = () => {
     dispatch(getRoomExists(roomId)).then((e) => {
+      console.log(e)
       if (e.payload.roomExists) {
         if (e.payload.full) {
           console.log("Room is full !, Please try again later");
         } else {
+          dispatch(setRoomId(roomId));
           navigate("/room");
         }
       } else {
-        //
+        // 
       }
     });
   };
@@ -69,7 +77,7 @@ const JoinRoomPage = () => {
         </p>
         <JoinRoomContent
           roomId={roomId}
-          setRoomId={setRoomId}
+          addRoom={addRoom}
           name={name}
           setName={setName}
         />

@@ -19,6 +19,18 @@ export const getRoomExists = createAsyncThunk(
   }
 );
 
+export const createRoom = createAsyncThunk(
+  "RTC/createRoom",
+  async ({}, { rejectWithValue }) => {
+    try {
+      const res = await fetch("");
+      return await res.json();
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 const BaseSlice = createSlice({
   name: "RTC",
   initialState: {
@@ -29,6 +41,7 @@ const BaseSlice = createSlice({
     error: "",
     roomExists: false,
     isFull: false,
+    roomId: null,
   },
   reducers: {
     setIdentity: (state, action) => {
@@ -39,6 +52,9 @@ const BaseSlice = createSlice({
     },
     isWithAudioOnly: (state, action) => {
       state.onlyAudio = action.payload;
+    },
+    setRoomId: (state, action) => {
+      state.roomId = action.payload;
     },
   },
   extraReducers: {
@@ -64,6 +80,6 @@ const BaseSlice = createSlice({
   },
 });
 
-export const { setIdentity, setHost, isWithAudioOnly } = BaseSlice.actions;
+export const { setIdentity, setHost, isWithAudioOnly, setRoomId} = BaseSlice.actions;
 
 export default BaseSlice.reducer;

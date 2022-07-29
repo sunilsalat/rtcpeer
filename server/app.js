@@ -19,7 +19,6 @@ app.get(`/api/room-exists/:roomId`, async (req, res) => {
   const room = rooms.find((room) => room.id === roomId);
 
   if (room) {
-    console.log(room);
     if (room?.connectedUser?.length > 3) {
       return res.status(200).json({ roomExists: true, full: true });
     } else {
@@ -29,6 +28,8 @@ app.get(`/api/room-exists/:roomId`, async (req, res) => {
     return res.status(200).json({ roomExists: false });
   }
 });
+
+app.post(`/api/create-room`, async (req, res) => {});
 
 const io = require("socket.io")(server, {
   cors: {
