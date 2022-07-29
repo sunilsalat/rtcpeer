@@ -8,6 +8,7 @@ export const initRtcConnection = async (isHost, identity, roomId) => {
       isHost ? wss.createRoom(identity) : wss.joinRoom(identity, roomId);
     })
     .catch((err) => {
+        console.log(err)
       console.log("Some error couured!, Please try again later");
     });
 };
