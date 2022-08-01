@@ -17,7 +17,6 @@ export const initRtcConnection = async (isHost, identity, roomId) => {
     });
 };
 
-
 let peers = {};
 let streams = [];
 const getConfiguration = () => {
@@ -57,7 +56,7 @@ export const prepareNewPeerConnection = async (
 };
 
 const showLocalVideoPreview = (stream) => {
-  const videosContainer = document.getElementById("videos_protal");
+  const videosContainer = document.getElementById("videos_portal");
   videosContainer.classList.add("videos_portal_styles");
   const videoContainer = document.createElement("div");
   videoContainer.classList.add("video_track_container");
@@ -73,9 +72,24 @@ const showLocalVideoPreview = (stream) => {
   videoContainer.appendChild(videoElemet);
   videosContainer.appendChild(videoContainer);
 };
- 
+
 const addStream = (stream, connectedUserId) => {
   // display incoming stream
+  const videosContainer = document.getElementById("videos_portal");
+  const videoContainer = document.createElement("div");
+  videoContainer.id = connectedUserId;
+  videoContainer.classList.add("video_track_container");
+  const videoElemet = document.createElement("video");
+  videoElemet.autoplay = true;
+  videoElemet.srcObject = stream;
+  videoElemet.onloadeddata = () => {
+    videoElemet.play();
+  };
+
+  videoElemet.id = `${connectedUserId}-video`;
+
+  videoContainer.appendChild(videoElemet);
+  videosContainer.appendChild(videoContainer);
 };
 
 export const handleSignalingData = (data) => {
