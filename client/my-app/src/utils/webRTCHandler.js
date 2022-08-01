@@ -25,10 +25,13 @@ const getConfiguration = () => {
   };
 };
 
-export const prepareNewPeerConnection = async (
+export const prepareNewPeerConnection =  async(
   connectedUserId,
   isInitiator
 ) => {
+
+  console.log(connectedUserId, 'connectes456')
+
   const configuration = getConfiguration();
   peers[connectedUserId] = new Peer({
     initiator: isInitiator,
@@ -65,7 +68,7 @@ const showLocalVideoPreview = (stream) => {
   videoElemet.muted = true;
   videoElemet.srcObject = stream;
 
-  videoElemet.onloadeddata = () => {
+  videoElemet.onloadedmetadata = () => {
     videoElemet.play();
   };
 
@@ -73,7 +76,15 @@ const showLocalVideoPreview = (stream) => {
   videosContainer.appendChild(videoContainer);
 };
 
+export const handleSignalingData = (data) => {
+  console.log('inside handleSingnalign function ')
+  // add singnlaing data to peer connection
+  // signaling back to the remote peer from the here newly joined user
+  peers[data.connectedUserId].signal(data.signal);
+};
+
 const addStream = (stream, connectedUserId) => {
+  console.log('inside new strem acma esdfsdf')
   // display incoming stream
   const videosContainer = document.getElementById("videos_portal");
   const videoContainer = document.createElement("div");
@@ -82,19 +93,16 @@ const addStream = (stream, connectedUserId) => {
   const videoElemet = document.createElement("video");
   videoElemet.autoplay = true;
   videoElemet.srcObject = stream;
-  videoElemet.onloadeddata = () => {
+ 
+  videoElemet.id = `${connectedUserId}-video`;
+
+  videoElemet.onloadedmetadata = () => {
     videoElemet.play();
   };
 
-  videoElemet.id = `${connectedUserId}-video`;
 
   videoContainer.appendChild(videoElemet);
   videosContainer.appendChild(videoContainer);
 };
 
-export const handleSignalingData = (data) => {
-  const { connectedUserId } = data;
-  // add singnlaing data to peer connection
-  // signaling back to the remote peer from the here newly joined user
-  peers[connectedUserId].signal(data.signal);
-};
+

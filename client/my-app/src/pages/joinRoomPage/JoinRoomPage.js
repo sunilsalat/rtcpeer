@@ -36,7 +36,6 @@ const JoinRoomPage = () => {
 
   const joinRoom = () => {
     dispatch(getRoomExists(roomId)).then((e) => {
-      console.log(e);
       if (e.payload.roomExists) {
         if (e.payload.full) {
           console.log("Room is full !, Please try again later");

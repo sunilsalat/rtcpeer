@@ -70,7 +70,6 @@ const BaseSlice = createSlice({
       state.isAwaiting = false;
       state.roomExists = action.payload.roomExists;
       state.isFull = action.payload.full;
-      console.log(action.payload.roomExists);
       state.error = "";
 
       // set some response

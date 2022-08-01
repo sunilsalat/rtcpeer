@@ -97,13 +97,18 @@ const joinRoomHandler = (data, socket) => {
        and send socket id of user who have newly/current joined 
     */
     if (user.socketId !== socket.id) {
+      console.log("socketId is:", user.socketId);
       const data = {
         /* connectedUserId is of curretn user who is joining */
         connectedUserId: socket.id,
       };
+      try {
+        io.to(user.socketId).emit("conn-prepare", data);
+        console.log('sent to ')
+      } catch (error) {
+        console.log(error);
+      }
     }
-
-    io.to(user.socketId).emit("conn-prepare", data);
   });
 
   io.to(roomId).emit("room-update", { connectedUser: room.connectedUser });
@@ -117,7 +122,7 @@ const usreDisconnectHandler = (socket) => {
   );
 
   socket.leave(user.roomId);
-  if (room.connectedUser.length > 0) {
+  if (room?.connectedUser?.length > 0) {
     io.to(room.id).emit("room-update", { connectedUser: room.connectedUser });
   } else {
     rooms = rooms.filter((r) => r.id !== room.id);
@@ -135,13 +140,8 @@ const signalingHandler = (data, socket) => {
 };
 
 const intiConnectionHandler = (data, socket) => {
-
-  const {connectedUserId} = data
-
-  const initData = {connectedUserId:socket.id}
-
-  io.to(connectedUserId).emit('conn-init', initData)
-
+  const initData = { connectedUserId: socket.id };
+  io.to(data.connectedUserId).emit("conn-init", initData);
 };
 
 server.listen(port, () => console.log(`server running on ${port}`));
