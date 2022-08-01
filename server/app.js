@@ -10,7 +10,7 @@ const server = http.createServer(app);
 app.use(cors());
 
 let connectedUser = [];
-let rooms = [{ id: "123", connectedUser: ["alex", "david", "olga"] }];
+let rooms = [];
 
 app.get(`/api/room-exists/:roomId`, async (req, res) => {
   const { roomId } = req.params;
