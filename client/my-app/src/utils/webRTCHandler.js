@@ -8,7 +8,7 @@ export const initRtcConnection = async (isHost, identity, roomId) => {
     .getUserMedia({ audio: true, video: true })
     .then((stream) => {
       localStream = stream;
-      localMediaPreview(localStream);
+      showLocalVideoPreview(localStream);
       isHost ? wss.createRoom(identity) : wss.joinRoom(identity, roomId);
     })
     .catch((err) => {
@@ -17,11 +17,6 @@ export const initRtcConnection = async (isHost, identity, roomId) => {
     });
 };
 
-const localMediaPreview = async (stream) => {
-  const localVideo = document.getElementById("local-video");
-  console.log(localVideo, "local video23");
-  localVideo.srcObject = stream;
-};
 
 let peers = {};
 let streams = [];
