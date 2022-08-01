@@ -1,6 +1,6 @@
 import io from "socket.io-client";
 import { setParticipants, setRoomId } from "../slices/BaseSlice";
-import webRTCHandler from "./webRTCHandler";
+import * as webRTCHandler from "./webRTCHandler.js";
 
 const SERVER = "http://localhost:5000";
 let socket = null;
@@ -23,9 +23,21 @@ export const connectWithSocketIoServer = (dispatch) => {
   });
 
   socket.on("conn-prepare", (data) => {
+    /* connectedUserId is socket.id of newly joined user */
     const { connectedUserId } = data;
     webRTCHandler.prepareNewPeerConnection(connectedUserId, false);
+
+    socket.emit("conn-init", { connecteUserId: connectedUserId });
   });
+
+  socket.on("conn-signal", (data) => {
+    webRTCHandler.handleSignalingData(data);
+  });
+
+  socket.on('conn-init', data=>{
+    const {connecteUserId} =data
+    webRTCHandler.prepareNewPeerConnection(connecteUserId, true)
+  })
 };
 
 export const createRoom = (identity) => {

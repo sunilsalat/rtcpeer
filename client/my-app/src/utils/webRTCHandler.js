@@ -42,7 +42,10 @@ export const prepareNewPeerConnection = async (
     stream: localStream,
   });
 
+  // if isInitiator true, peer will start listening to signal
+
   peers[connectedUserId].on("signal", (data) => {
+    /* Fired when the peer wants to send signaling data to the remote peer. */
     // we will get offer, answer, all sdp data, all ice candidate data
     const signalData = {
       signal: data,
@@ -52,6 +55,7 @@ export const prepareNewPeerConnection = async (
   });
 
   peers[connectedUserId].on("stream", (stream) => {
+    /* will be receiving stream form other users in future */
     console.log("new stream came");
     addStream(stream, connectedUserId);
     streams = [...streams, stream];
@@ -60,4 +64,10 @@ export const prepareNewPeerConnection = async (
 
 const addStream = (stream, connectedUserId) => {
   // display incoming stream
+};
+
+export const handleSignalingData = (data) => {
+  // add singnlaing data to peer connection
+  // signaling back to the remote peer from the here newly joined user
+  peers[connectedUserId].signal(data.signal);
 };

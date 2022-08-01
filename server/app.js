@@ -45,6 +45,14 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     usreDisconnectHandler(socket);
   });
+
+  socket.on("conn-signal", (data) => {
+    signalingHandler(data, socket);
+  });
+
+  socket.on("conn-init", (data) => {
+    intiConnectionHandler(data, socket);
+  });
 });
 
 const createNewRoomHandler = (data, socket) => {
@@ -84,16 +92,17 @@ const joinRoomHandler = (data, socket) => {
   socket.join(roomId); // join socket to room
   connectedUser = [...connectedUser, newUser];
 
-  /* emit to all user which are in room to prepare peer connection  */
   room.connectedUser.forEach((user) => {
-    if (user.socketId !== socket.id) {
-      const data = {
-        connectedUserId: socket.id,
-      };
-    }
     /* emit an event to individul user in the room and ask them to prepate for RTCPeerConnection
        and send socket id of user who have newly/current joined 
     */
+    if (user.socketId !== socket.id) {
+      const data = {
+        /* connectedUserId is of curretn user who is joining */
+        connectedUserId: socket.id,
+      };
+    }
+
     io.to(user.socketId).emit("conn-prepare", data);
   });
 
@@ -102,21 +111,37 @@ const joinRoomHandler = (data, socket) => {
 
 const usreDisconnectHandler = (socket) => {
   const user = connectedUser.find((user) => user.socketId === socket.id);
-
   const room = rooms.find((room) => room.id === user.roomId);
   room.connectedUser = room.connectedUser.filter(
     (user) => user.socketId !== socket.id
   );
 
   socket.leave(user.roomId);
-
   if (room.connectedUser.length > 0) {
     io.to(room.id).emit("room-update", { connectedUser: room.connectedUser });
   } else {
     rooms = rooms.filter((r) => r.id !== room.id);
   }
 
-  // handler later remov room if no one exists
+  // TODO--handler later remove room if no one exists
+};
+
+const signalingHandler = (data, socket) => {
+  const { connectedUserId, signal } = data;
+  const signalingData = { signal, connectedUserId: socket.id };
+  /* exchanging data , receiving form remote peer and 
+  sendign back to the newly joined user to the room   */
+  io.to(connectedUserId).emit("conn-signal", signalingData);
+};
+
+const intiConnectionHandler = (data, socket) => {
+
+  const {connectedUserId} = data
+
+  const initData = {connectedUserId:socket.id}
+
+  io.to(connectedUserId).emit('conn-init', initData)
+
 };
 
 server.listen(port, () => console.log(`server running on ${port}`));
