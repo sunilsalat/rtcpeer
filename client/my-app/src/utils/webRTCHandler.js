@@ -43,7 +43,6 @@ export const prepareNewPeerConnection = async (
   });
 
   // if isInitiator true, peer will start listening to signal
-
   peers[connectedUserId].on("signal", (data) => {
     /* Fired when the peer wants to send signaling data to the remote peer. */
     // we will get offer, answer, all sdp data, all ice candidate data
@@ -62,11 +61,30 @@ export const prepareNewPeerConnection = async (
   });
 };
 
+const showLocalVideoPreview = (stream) => {
+  const videosContainer = document.getElementById("videos_protal");
+  videosContainer.classList.add("videos_portal_styles");
+  const videoContainer = document.createElement("div");
+  videoContainer.classList.add("video_track_container");
+  const videoElemet = document.createElement("video");
+  videoElemet.autoplay = true;
+  videoElemet.muted = true;
+  videoElemet.srcObject = stream;
+
+  videoElemet.onloadeddata = () => {
+    videoElemet.play();
+  };
+
+  videoContainer.appendChild(videoElemet);
+  videosContainer.appendChild(videoContainer);
+};
+
 const addStream = (stream, connectedUserId) => {
   // display incoming stream
 };
 
 export const handleSignalingData = (data) => {
+  const { connectedUserId } = data;
   // add singnlaing data to peer connection
   // signaling back to the remote peer from the here newly joined user
   peers[connectedUserId].signal(data.signal);
