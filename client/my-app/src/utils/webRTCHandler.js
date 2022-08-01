@@ -78,7 +78,7 @@ const showLocalVideoPreview = (stream) => {
   videoContainer.appendChild(videoElemet);
   videosContainer.appendChild(videoContainer);
 };
-
+ 
 const addStream = (stream, connectedUserId) => {
   // display incoming stream
 };
