@@ -11,7 +11,6 @@ export const getRoomExists = createAsyncThunk(
       if (res.status !== 200) {
         throw new Error(res.error);
       }
-
       return await res.json();
     } catch (error) {
       return rejectWithValue(error.message);
@@ -42,6 +41,7 @@ const BaseSlice = createSlice({
     roomExists: false,
     isFull: false,
     roomId: null,
+    paricipants: [],
   },
   reducers: {
     setIdentity: (state, action) => {
@@ -55,6 +55,9 @@ const BaseSlice = createSlice({
     },
     setRoomId: (state, action) => {
       state.roomId = action.payload;
+    },
+    setParticipants: (state, action) => {
+      state.paricipants = action.payload;
     },
   },
   extraReducers: {
@@ -80,6 +83,12 @@ const BaseSlice = createSlice({
   },
 });
 
-export const { setIdentity, setHost, isWithAudioOnly, setRoomId} = BaseSlice.actions;
+export const {
+  setIdentity,
+  setHost,
+  isWithAudioOnly,
+  setRoomId,
+  setParticipants,
+} = BaseSlice.actions;
 
 export default BaseSlice.reducer;

@@ -12,7 +12,7 @@ import JoinRoomContent from "./components/JoinRoomContent";
 import JoinRoomButtons from "./components/joinRoomButton";
 
 const JoinRoomPage = () => {
-  const [roomId, addRoom] = useState('');
+  const [roomId, addRoom] = useState("");
   const [name, setName] = useState("");
   const { search } = useLocation();
   const dispatch = useDispatch();
@@ -36,7 +36,7 @@ const JoinRoomPage = () => {
 
   const joinRoom = () => {
     dispatch(getRoomExists(roomId)).then((e) => {
-      console.log(e)
+      console.log(e);
       if (e.payload.roomExists) {
         if (e.payload.full) {
           console.log("Room is full !, Please try again later");
@@ -45,7 +45,7 @@ const JoinRoomPage = () => {
           navigate("/room");
         }
       } else {
-        // 
+        console.log("Room with given id does not exists!!");
       }
     });
   };

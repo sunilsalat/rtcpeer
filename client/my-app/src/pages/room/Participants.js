@@ -1,11 +1,5 @@
 import React from "react";
-
-const dummyParticipants = [
-  { identity: "Jake" },
-  { identity: "anna" },
-  { identity: "mark" },
-  { identity: "alex" },
-];
+import { useSelector } from "react-redux";
 
 const SingleParticipant = ({ identity, lastItem, participant }) => {
   return (
@@ -17,14 +11,16 @@ const SingleParticipant = ({ identity, lastItem, participant }) => {
 };
 
 function Participants() {
+  const { paricipants } = useSelector((state) => state.baseSlice);
+
   return (
     <div className="participants_container">
-      {dummyParticipants.map((e, index) => {
+      {paricipants.map((e, index) => {
         return (
           <SingleParticipant
             key={e.identity}
             identity={e.identity}
-            lastItem={dummyParticipants.length === index + 1}
+            lastItem={paricipants.length === index + 1}
             participant={e}
           />
         );
