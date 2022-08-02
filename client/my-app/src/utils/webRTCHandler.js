@@ -67,7 +67,6 @@ const showLocalVideoPreview = (stream) => {
   videoElemet.autoplay = true;
   videoElemet.muted = true;
   videoElemet.srcObject = stream;
-
   videoElemet.onloadedmetadata = () => {
     videoElemet.play();
   };

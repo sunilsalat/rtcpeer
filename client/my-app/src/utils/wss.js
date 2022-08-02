@@ -25,12 +25,9 @@ export const connectWithSocketIoServer = (dispatch) => {
   });
 
   socket.on("conn-prepare", (data) => {
-    console.log('inside connection prepare')
     /* connectedUserId is socket.id of newly joined user */
     const { connectedUserId } = data;
-    console.log('coon-prepare', connectedUserId)
     prepareNewPeerConnection(connectedUserId, false);
-
     socket.emit("conn-init", data);
   });
 
@@ -39,8 +36,8 @@ export const connectWithSocketIoServer = (dispatch) => {
   });
 
   socket.on("conn-init", (data) => {
-    const { connecteUserId } = data;
-    prepareNewPeerConnection(connecteUserId, true);
+    const { connectedUserId } = data;
+    prepareNewPeerConnection(connectedUserId, true);
   });
 };
 
