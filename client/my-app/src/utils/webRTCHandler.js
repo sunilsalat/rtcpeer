@@ -25,12 +25,11 @@ const getConfiguration = () => {
   };
 };
 
-export const prepareNewPeerConnection =  async(
+export const prepareNewPeerConnection = async (
   connectedUserId,
   isInitiator
 ) => {
-
-  console.log(connectedUserId, 'connectes456')
+  console.log(connectedUserId, "connectes456");
 
   const configuration = getConfiguration();
   peers[connectedUserId] = new Peer({
@@ -67,23 +66,26 @@ const showLocalVideoPreview = (stream) => {
   videoElemet.autoplay = true;
   videoElemet.muted = true;
   videoElemet.srcObject = stream;
+
   videoElemet.onloadedmetadata = () => {
     videoElemet.play();
   };
+
+  
 
   videoContainer.appendChild(videoElemet);
   videosContainer.appendChild(videoContainer);
 };
 
 export const handleSignalingData = (data) => {
-  console.log('inside handleSingnalign function ')
+  console.log("inside handleSingnalign function ");
   // add singnlaing data to peer connection
   // signaling back to the remote peer from the here newly joined user
   peers[data.connectedUserId].signal(data.signal);
 };
 
 const addStream = (stream, connectedUserId) => {
-  console.log('inside new strem acma esdfsdf')
+  console.log("inside new strem acma esdfsdf");
   // display incoming stream
   const videosContainer = document.getElementById("videos_portal");
   const videoContainer = document.createElement("div");
@@ -92,16 +94,21 @@ const addStream = (stream, connectedUserId) => {
   const videoElemet = document.createElement("video");
   videoElemet.autoplay = true;
   videoElemet.srcObject = stream;
- 
+
   videoElemet.id = `${connectedUserId}-video`;
 
   videoElemet.onloadedmetadata = () => {
     videoElemet.play();
   };
 
+  videoElemet.addEventListener("click", () => {
+    if (videoElemet.classList.contains("full_screen")) {
+      videoElemet.classList.remove("full_screen");
+    } else {
+      videoElemet.classList.add("full_screen");
+    }
+  });
 
   videoContainer.appendChild(videoElemet);
   videosContainer.appendChild(videoContainer);
 };
-
-
